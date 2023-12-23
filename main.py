@@ -30,4 +30,4 @@ def start(word):
 
 for i in argv[1:]: start(i)
 
-shell()
+shell().shell()
