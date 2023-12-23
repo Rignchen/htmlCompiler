@@ -1,4 +1,5 @@
 from os import system, name
+from lib import align
 from settings import settings
 
 def cls():system("clear" if name == "" else "cls")
@@ -8,17 +9,13 @@ class shell:
 		self.is_running = True
 
 	def help(self):
-		max = 0
-		commands: list[str][str] = [i.split(" - ",1) for i in [
+		print(align([
 			"help - displays this message",
 			"clear - clears the screen",
 			"compile - starts the compiler",
 			"settings - opens the settings menu",
 			"exit - exits the program",
-		]]
-		for i in commands:
-			if len(i[0]) > max: max = len(i[0])
-		for i in commands: print(f"{i[0].ljust(max)} - {i[1]}")
+		], " - "))
 		print("\nPressing ctrl + c will allways bring you back to the main menu\n")
 
 	def run(self,command):

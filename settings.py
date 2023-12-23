@@ -1,41 +1,30 @@
 from json import load, dump
-
-def sec2hours(sec: int) -> str:
-	hours = sec // 3600
-	minutes = (sec - hours * 3600) // 60
-	seconds = sec - hours * 3600 - minutes * 60
-	out = ""
-	if hours > 0: out += f"{hours}h "
-	if minutes > 0: out += f"{minutes}m "
-	if seconds > 0: out += f"{seconds}s"
-	return out
+from lib import align, sec2hours
 
 class settings:
 	def __init__(self):
 		with open("htmlCompilerSettings.json", "r") as f:
 			loaded = load(f)
 
+		self.version = loaded["htmlCompilerVersion"]
 		self.autoCompile = loaded["autoCompile"]
 		self.compileDelay = loaded["compileDelay"]
 		# add settings here
 	def save(self):
 		with open("htmlCompilerSettings.json", "w") as f:
 			dump({
+				"htmlCompilerVersion": self.version,
 				"autoCompile": self.autoCompile,
 				"compileDelay": self.compileDelay,
 				# add settings here
 			}, f, indent="\t")
 	def help(self):
-		print("Settings Menu")
-		max = 0
-		commands: list[str][str] = [i.split(" - ",1) for i in [
+		print()
+		print(align([
 			"autocompile - toggles whether the compiler will automatically compile files when they are saved",
 			"compiledelay - sets the delay between each time the compiler will check for files to compile (in seconds)",
 			# add settings here
-		]]
-		for i in commands:
-			if len(i[0]) > max: max = len(i[0])
-		for i in commands: print(f"{i[0].ljust(max)} - {i[1]}")
+		], " - "))
 		print("""
 Type 'exit' to return to the main menu
 Type 'reset' to reset all settings to default
@@ -44,9 +33,10 @@ Type 'reset' to reset all settings to default
 		print("Settings Menu")
 		while True:
 			command = input("\r\033[91mHtmlCompiler Settings\033[0m >>> ").split(" ")
-			match command[0]:
+			match command[0].lower():
 				case "exit"|"esc": return
 				case "help": self.help()
+				case "": pass
 				case "reset":
 					self.autoCompile = True
 					self.compileDelay = 600
@@ -75,3 +65,4 @@ Type 'reset' to reset all settings to default
 						print("Invalid compile delay")
 						print("Compile delay must be a number")
 				# add settings here
+				case _: print(f"Unknown command '{command[0]}'")

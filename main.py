@@ -3,10 +3,14 @@ from os import chdir
 from shell import shell
 
 def init():
-	## create all the necessary files and folders
-	# create the htmlCompilerSettings.json file
+	"""
+	create all the necessary files and folders
+	"""
 	from json import dump
+	from os import mkdir, listdir
+	# create the htmlCompilerSettings.json file
 	settings = {
+		"htmlCompilerVersion": 1,
 		"autoCompile": True,
 		"compileDelay": 600, # = 10 minutes
 		# add settings here
@@ -14,9 +18,8 @@ def init():
 	with open("htmlCompilerSettings.json", "w") as f:
 		dump(settings, f, indent="\t")
 	# create the run and compiled folder
-	from os import mkdir
-	mkdir("run")
-	mkdir("compiled")
+	if not "run" in listdir():mkdir("run")
+	if not "compiled" in listdir():mkdir("compiled")
 	# create the gitignore file
 	with open(".gitignore", "w") as f:
 		f.write("compiled\nhtmlCompilerSettings.json")
