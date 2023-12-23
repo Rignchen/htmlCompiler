@@ -1,4 +1,5 @@
 from os import system, name
+from settings import settings
 
 def cls():system("clear" if name == "" else "cls")
 
@@ -8,7 +9,7 @@ class shell:
 
 	def help(self):
 		max = 0
-		commands: list[str][str] = [i.split(" - ") for i in [
+		commands: list[str][str] = [i.split(" - ",1) for i in [
 			"help - displays this message",
 			"clear - clears the screen",
 			"compile - starts the compiler",
@@ -18,7 +19,7 @@ class shell:
 		for i in commands:
 			if len(i[0]) > max: max = len(i[0])
 		for i in commands: print(f"{i[0].ljust(max)} - {i[1]}")
-		print()
+		print("\nPressing ctrl + c will allways bring you back to the main menu\n")
 
 	def run(self,command):
 		match command:
@@ -28,6 +29,12 @@ class shell:
 				cls()
 			case "help":
 				self.help()
+			case "settings"|"set":
+				settings().menu()
+			case "":
+				pass
+			case _:
+				print(f"Unknown command '{command}'")
 
 	def shell(self):
 		cls()
@@ -39,4 +46,4 @@ class shell:
 				command = input("\r\033[92mHtmlCompiler\033[0m >>> ")
 				self.run(command)
 			except KeyboardInterrupt:
-				pass
+				print()

@@ -9,9 +9,10 @@ def init():
 	settings = {
 		"autoCompile": True,
 		"compileDelay": 600, # = 10 minutes
+		# add settings here
 	}
 	with open("htmlCompilerSettings.json", "w") as f:
-		dump(settings, f, indent=4)
+		dump(settings, f, indent="\t")
 	# create the run and compiled folder
 	from os import mkdir
 	mkdir("run")
@@ -19,7 +20,6 @@ def init():
 	# create the gitignore file
 	with open(".gitignore", "w") as f:
 		f.write("compiled\nhtmlCompilerSettings.json")
-
 def start(word):
 	match word:
 		case "init":
