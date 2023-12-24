@@ -1,6 +1,6 @@
 from sys import argv
 from os import chdir
-from shell import shell
+from script.shell import shell
 
 def init():
 	"""

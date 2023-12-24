@@ -1,6 +1,6 @@
 from os import system, name
 from lib import align, readVersion
-from settings import settings
+from script.settings import settings
 
 def cls():system("clear" if name == "" else "cls")
 
