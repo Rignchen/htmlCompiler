@@ -7,7 +7,7 @@ class compiler:
 	def __init__(self, settings):
 		self.settings = settings.get
 		with open("htmlCompilerCache.json", "r") as f:
-			self.cache: dict[str,str] = load(f)
+			self.cache: dict[str,str|bool] = load(f)
 	def save(self):
 		with open("htmlCompilerCache.json", "w") as f:
 			dump(self.cache, f, indent="\t")
@@ -33,8 +33,12 @@ class compiler:
 		for (path, dirs, files) in walk("run"):
 			for file in files:
 				filePath = f"{path}/{file}"
-				with open(filePath, "r") as f:
-					fileContent = f.read()
+				try:
+					with open(filePath, "r") as f:
+						fileContent = f.read()
+				except UnicodeDecodeError:
+					with open(filePath, "rb") as f:
+						fileContent = str(f.read())
 				if filePath in self.cache:
 					if self.cache[filePath] != fileContent:
 						self.compileFile(filePath,fileContent)
@@ -53,4 +57,6 @@ class compiler:
 		compiledFilePath = f"compiled/{filePath.removeprefix('run/')}"
 		makedirs(osPath.dirname(compiledFilePath), exist_ok=True)
 
-		copy(filePath, compiledFilePath)
+		match filePath.split(".")[-1]:
+			case _:
+				copy(filePath, compiledFilePath)
