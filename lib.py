@@ -18,18 +18,14 @@ def align(text: list[str], split: str, join:str = None) -> str:
 	return "\n".join([join.join(i) for i in out])
 def sec2hours(sec: int) -> str:
 	"""
-	Converts seconds to hours, minutes and seconds.
+	Converts seconds to days, hours, minutes and seconds.
 	"""
-	if sec == 0: return "0s"
-	elif sec < 0: return f"-{sec2hours(-sec)}"
-	hours = sec // 3600
-	minutes = (sec - hours * 3600) // 60
-	seconds = sec - hours * 3600 - minutes * 60
-	out = ""
-	if hours > 0: out += f"{hours}h "
-	if minutes > 0: out += f"{minutes}m "
-	if seconds > 0: out += f"{seconds}s"
-	return out
+	if sec < 0: return f"-{sec2hours(-sec)}"
+	if sec >= 86400: return f"{sec // 86400}d {sec2hours(sec % 86400)}"
+	if sec >= 3600: return f"{sec // 3600}h {sec2hours(sec % 3600)}"
+	if sec >= 60: return f"{sec // 60}m {sec2hours(sec % 60)}"
+	if sec > 0: return f"{sec}s"
+	return ""
 def readVersion(version: int) -> str:
 	"""
 	display the version number in a readable format: mm.ss.ff

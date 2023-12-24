@@ -45,10 +45,12 @@ Type 'reset' to reset all settings to default
 						self.save()
 				case "compiledelay":
 					if len(command) == 1:
-						print(f"Compile delay is currently set to {sec2hours(self.get['compileDelay'])}")
+						compiledelay = self.get['compileDelay']
+						print(f"Compile delay is currently set to {'0s' if compiledelay == 0 else sec2hours(compiledelay)}")
 					elif command[1].isdigit():
 						self.get['compileDelay'] = int(command[1])
-						print(f"Compile delay has been set to {sec2hours(self.get['compileDelay'])}")
+						compiledelay = self.get['compileDelay']
+						print(f"Compile delay has been set to {'0s' if compiledelay == 0 else sec2hours(compiledelay)}")
 						self.save()
 					else:
 						print("Invalid compile delay")
