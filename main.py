@@ -15,6 +15,8 @@ def init():
 		"compileDelay": 600, # = 10 minutes
 		# add settings here
 	}
+	# create the htmlCompilerCache.json file
+	with open("htmlCompilerCache.json", "w") as f: f.write("{}")
 	with open("htmlCompilerSettings.json", "w") as f:
 		dump(settings, f, indent="\t")
 	# create the run and compiled folder
