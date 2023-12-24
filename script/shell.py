@@ -1,5 +1,5 @@
 from os import system, name
-from lib import align, readVersion
+from script.lib import align, readVersion
 from script.settings import settings
 from script.compiler import compiler
 
