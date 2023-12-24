@@ -1,6 +1,7 @@
 from os import system, name
 from lib import align, readVersion
 from script.settings import settings
+from script.compiler import compiler
 
 def cls():system("clear" if name == "" else "cls")
 
@@ -8,6 +9,7 @@ class shell:
 	def __init__(self):
 		self.is_running = True
 		self.settings = settings()
+		self.compiler = compiler(self.settings)
 
 	def help(self):
 		print(align([
@@ -18,8 +20,8 @@ class shell:
 			"exit - exits the program",
 		], " - "))
 
-	def run(self,command):
-		match command:
+	def run(self,command: str):
+		match command.strip():
 			case "":
 				pass
 			case "exit"|"esc":
@@ -30,6 +32,8 @@ class shell:
 				self.help()
 			case "settings"|"set":
 				self.settings.menu()
+			case "compile"|"build"|"start":
+				self.compiler.start()
 			case _:
 				print(f"Unknown command '{command}'")
 

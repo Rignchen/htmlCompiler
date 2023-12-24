@@ -20,9 +20,8 @@ Type 'exit' to return to the main menu
 Type 'reset' to reset all settings to default
 """)
 	def menu(self):
-		print("Settings Menu")
 		while True:
-			command = input("\r\033[91mHtmlCompiler Settings\033[0m >>> ").split(" ")
+			command = input("\r\033[91mHtmlCompiler Settings\033[0m >>> ").strip().split(" ")
 			match command[0].lower():
 				case "exit"|"esc": return
 				case "help": self.help()
