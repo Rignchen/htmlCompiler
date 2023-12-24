@@ -1,6 +1,6 @@
 from json import load, dump
 from datetime import datetime, timedelta
-from os import walk
+from os import walk, path as osPath
 
 class compiler:
 	def __init__(self, settings):
@@ -21,6 +21,12 @@ class compiler:
 		print("\r\033[94mChecking for changes...\033[0m",end="")
 		# compile all the files from the subfolder "run" if they changed
 		self.change = False
+		cacheCopy = self.cache.copy()
+		for cacheFile in cacheCopy:
+			if not osPath.exists(cacheFile):
+				self.change = True
+				print(f"\nDeleting {cacheFile}...",end="")
+				del self.cache[cacheFile]
 		for (path, dirs, files) in walk("run"):
 			for file in files:
 				filePath = f"{path}/{file}"
