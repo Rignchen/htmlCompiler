@@ -17,6 +17,7 @@ class shell:
 			"clear - clears the screen",
 			"compile - starts the compiler",
 			"settings - opens the settings menu",
+			"clearCache - Empty the whole cache"
 			"exit - exits the program",
 		], " - "))
 
