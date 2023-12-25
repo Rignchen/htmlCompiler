@@ -45,7 +45,7 @@ class shell:
 	def shell(self):
 		cls()
 		print("Welcome to HtmlCompiler!")
-		print("Version:", readVersion(self.settings.get['htmlCompilerVersion']))
+		print("Version:", readVersion(self.settings.version))
 		print("Type 'help' for a list of commands\n")
 		while self.is_running:
 			try:

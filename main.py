@@ -10,7 +10,6 @@ def init():
 	from os import mkdir, listdir
 	# create the htmlCompilerSettings.json file
 	settings = {
-		"htmlCompilerVersion": 1,
 		"autoCompile": True,
 		"compileDelay": 10, # seconds
 		# add settings here
