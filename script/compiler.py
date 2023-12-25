@@ -29,15 +29,16 @@ class compiler:
 		print("\r\033[94mChecking for changes...\033[0m",end="")
 		# compile all the files from the subfolder "run" if they changed
 		self.change = False
-		self.changeModels = False
+		self.changeModels = []
 		cacheCopy = self.cache.copy()
 		for cacheFile in cacheCopy:
 			if not osPath.exists(cacheFile):
 				self.change = True
 				print(f"\nDeleting {cacheFile}...",end="")
 				if cacheFile.endswith("/model.html"):
-					del self.models[cacheFile.removesuffix("/model.html")]
-					self.changeModels = True
+					model = cacheFile.removesuffix("/model.html")
+					del self.models[model]
+					self.actualiseModels(model)
 				else: remove(f"compiled/{cacheFile.removeprefix('run/')}")
 				del self.cache[cacheFile]
 		for (path, dirs, files) in walk("run"):
@@ -48,8 +49,9 @@ class compiler:
 				self.compilePath(osPath.join(path, file))
 		if self.change:
 			print()
+			if self.changeModels:
+				self.saveModels()
 			self.saveCache()
-			if self.changeModels: self.saveModels()
 		else:
 			print("\r\033[91mNo changes detected    \033[0m",end="")
 	def compilePath(self, filePath: str):
@@ -81,11 +83,18 @@ class compiler:
 					print(f"\r\033[91mUnable to compile {filePath}",end="")
 					return
 				if osPath.basename(filePath) == "model.html":
-					self.changeModels = True
-					self.models[filePath.removesuffix("/model.html")] = compiled
+					model = filePath.removesuffix("/model.html")
+					self.actualiseModels(model)
+					self.models[model] = compiled
 				else:
 					with open(compiledFilePath, "w") as f:
 						f.write(compiled)
 			case _:
 				copy(filePath, compiledFilePath)
+	def actualiseModels(self, modelName: str):
+		if self.changeModels:return
+		cachCopy = self.cache.copy()
+		for file in cachCopy:
+			if file.startswith(modelName) and file != modelName + "/model.html": del self.cache[file]
+		self.changeModels = True
 
