@@ -6,9 +6,9 @@ from script.compiler import compiler
 def cls():system("clear" if name == "" else "cls")
 
 class shell:
-	def __init__(self):
+	def __init__(self,param):
 		self.is_running = True
-		self.settings = settings()
+		self.settings = settings(param)
 		self.compiler = compiler(self.settings)
 
 	def help(self):

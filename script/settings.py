@@ -2,7 +2,8 @@ from json import load, dump
 from script.lib import align, sec2hours
 
 class settings:
-	def __init__(self):
+	def __init__(self, param):
+		self.param = param
 		with open("htmlCompilerSettings.json", "r") as f:
 			self.get: dict[str,any] = load(f)
 	def save(self):

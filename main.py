@@ -26,13 +26,20 @@ def init():
 	with open(".gitignore", "w") as f:
 		f.write("compiled\nhtmlCompilerSettings.json")
 def start(word):
+	global param
 	match word:
 		case "init":
 			init()
 			print("Initialized!")
+		case "compilerDebug":
+			param["compilerDebug"] = True
 		case _:
 			chdir(word)
 
+param = {
+	"compilerDebug": False
+}
+
 for i in argv[1:]: start(i)
 
-shell().shell()
+shell(param).shell()

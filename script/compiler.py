@@ -6,17 +6,17 @@ from script.fileCompiler.htmlFile import compileHTML
 
 class compiler:
 	def __init__(self, settings):
-		self.settings = settings.get
-		self.models = {}
+		self.settings = settings
+		self.models {}
 		with open("htmlCompilerCache.json", "r") as f:
-			self.cache: dict[str,str|bool] = load(f)
+			self.cache: dict[str,str] = load(f)
 	def save(self):
 		with open("htmlCompilerCache.json", "w") as f:
 			dump(self.cache, f, indent="\t")
 	def start(self):
 		print("\033[94mStart compiler...\033[0m")
-		while self.settings["autoCompile"]:
-			end = datetime.now() + timedelta(seconds=self.settings["compileDelay"])
+		while self.settings.get["autoCompile"]:
+			end = datetime.now() + timedelta(seconds=self.settings.get["compileDelay"])
 			self.test_compile()
 			while datetime.now() < end: pass
 		else:
@@ -65,7 +65,12 @@ class compiler:
 
 		match filePath.split(".")[-1]:
 			case "html":
-				compiled = compileHTML(fileContent,filePath,self.models)
+				try:
+					compiled = compileHTML(fileContent,filePath,self.models)
+				except:
+					if self.settings.param["compilerDebug"]: raise
+					print(f"\r\033[91mUnable to compile {filePath}",end="")
+					return
 				if osPath.basename(filePath) == "model.html":
 					self.models[filePath.removesuffix("/model.html")] = compiled
 				else:
