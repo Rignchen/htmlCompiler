@@ -15,7 +15,6 @@ def getModel(modelList: dict[str,list[str]], filePath: str) -> str:
 	path = filePath.replace("\\","/").split("/")
 	is_model = path.pop() == "model.html"
 	for i in range(len(path),0,-1):
-		print(path[:i-1 if is_model else i])
 		currentPath = "/".join(path[:i-1 if is_model else i])
 		if currentPath in modelList:
 			return modelList[currentPath]
