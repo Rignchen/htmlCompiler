@@ -1,11 +1,13 @@
 def compileHTML(fileContent, filePath, models):
 	modelList = getModelList(models, filePath)
-def compileModels(fileContent: str) -> list[str]:
-	return [fileContent]
 def removeComments(fileContent: str) -> str:
 	while "<!--" in fileContent:
 		fileContent = fileContent[:fileContent.index("<!--")] + fileContent[fileContent.index("-->")+3:]
 	return fileContent
+
+def splitModels(fileContent: str) -> list[str]:
+	models = [model.split("</model>")[0] for model in fileContent.split("<model>")]
+	return models[1:] if len(models) > 1 else models
 def getModelList(modelList: dict[str,list[str]], filePath: str) -> list[list[str]]:
 	path = filePath.replace("\\","/").split("/")
 	pathList: list[list[str]] = []
