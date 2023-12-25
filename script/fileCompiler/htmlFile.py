@@ -13,8 +13,10 @@ def splitModels(fileContent: str) -> list[str]:
 	return models[1:] if len(models) > 1 else models
 def getModel(modelList: dict[str,list[str]], filePath: str) -> str:
 	path = filePath.replace("\\","/").split("/")
-	for i in range(len(path)-1,-1,-1):
-		currentPath = "/".join(path[:i+1])
+	is_model = path.pop() == "model.html"
+	for i in range(len(path),0,-1):
+		print(path[:i-1 if is_model else i])
+		currentPath = "/".join(path[:i-1 if is_model else i])
 		if currentPath in modelList:
 			return modelList[currentPath]
 def pasteModel(model: str, contents: list[str]) -> str:

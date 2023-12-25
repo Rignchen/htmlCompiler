@@ -17,6 +17,7 @@ def init():
 	}
 	# create the htmlCompilerCache.json file
 	with open("htmlCompilerCache.json", "w") as f: f.write("{}")
+	with open("htmlCompilerModelsCache.json", "w") as f: f.write("{}")
 	with open("htmlCompilerSettings.json", "w") as f:
 		dump(settings, f, indent="\t")
 	# create the run and compiled folder
@@ -24,7 +25,7 @@ def init():
 	if not "compiled" in listdir():mkdir("compiled")
 	# create the gitignore file
 	with open(".gitignore", "w") as f:
-		f.write("compiled\nhtmlCompilerSettings.json")
+		f.write("compiled\nhtmlCompiler*.json\n")
 def start(word):
 	global param
 	match word:

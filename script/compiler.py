@@ -7,12 +7,16 @@ from script.fileCompiler.htmlFile import compileHTML
 class compiler:
 	def __init__(self, settings):
 		self.settings = settings
-		self.models {}
+		with open("htmlCompilerModelsCache.json", "r") as f:
+			self.models: dict[str,str] = load(f)
 		with open("htmlCompilerCache.json", "r") as f:
 			self.cache: dict[str,str] = load(f)
-	def save(self):
+	def saveCache(self):
 		with open("htmlCompilerCache.json", "w") as f:
 			dump(self.cache, f, indent="\t")
+	def saveModels(self):
+		with open("htmlCompilerModelsCache.json", "w") as f:
+			dump(self.models, f, indent="\t")
 	def start(self):
 		print("\033[94mStart compiler...\033[0m")
 		while self.settings.get["autoCompile"]:
@@ -25,12 +29,16 @@ class compiler:
 		print("\r\033[94mChecking for changes...\033[0m",end="")
 		# compile all the files from the subfolder "run" if they changed
 		self.change = False
+		self.changeModels = False
 		cacheCopy = self.cache.copy()
 		for cacheFile in cacheCopy:
 			if not osPath.exists(cacheFile):
 				self.change = True
 				print(f"\nDeleting {cacheFile}...",end="")
-				remove(f"compiled/{cacheFile.removeprefix('run/')}")
+				if cacheFile.endswith("/model.html"):
+					del self.models[cacheFile.removesuffix("/model.html")]
+					self.changeModels = True
+				else: remove(f"compiled/{cacheFile.removeprefix('run/')}")
 				del self.cache[cacheFile]
 		for (path, dirs, files) in walk("run"):
 			if "model.html" in files:
@@ -40,7 +48,8 @@ class compiler:
 				self.compilePath(osPath.join(path, file))
 		if self.change:
 			print()
-			self.save()
+			self.saveCache()
+			if self.changeModels: self.saveModels()
 		else:
 			print("\r\033[91mNo changes detected    \033[0m",end="")
 	def compilePath(self, filePath: str):
@@ -72,6 +81,7 @@ class compiler:
 					print(f"\r\033[91mUnable to compile {filePath}",end="")
 					return
 				if osPath.basename(filePath) == "model.html":
+					self.changeModels = True
 					self.models[filePath.removesuffix("/model.html")] = compiled
 				else:
 					with open(compiledFilePath, "w") as f:
