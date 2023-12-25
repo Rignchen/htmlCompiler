@@ -2,10 +2,12 @@ from json import load, dump
 from datetime import datetime, timedelta
 from os import makedirs, walk, path as osPath, remove
 from shutil import copy
+from script.fileCompiler.htmlFile import compileHTML
 
 class compiler:
 	def __init__(self, settings):
 		self.settings = settings.get
+		self.models = {}
 		with open("htmlCompilerCache.json", "r") as f:
 			self.cache: dict[str,str|bool] = load(f)
 	def save(self):
@@ -31,24 +33,28 @@ class compiler:
 				remove(f"compiled/{cacheFile.removeprefix('run/')}")
 				del self.cache[cacheFile]
 		for (path, dirs, files) in walk("run"):
+			if "model.html" in files:
+				self.compilePath(osPath.join(path, "model.html"))
 			for file in files:
-				filePath = f"{path}/{file}"
-				try:
-					with open(filePath, "r") as f:
-						fileContent = f.read()
-				except UnicodeDecodeError:
-					with open(filePath, "rb") as f:
-						fileContent = str(f.read())
-				if filePath in self.cache:
-					if self.cache[filePath] != fileContent:
-						self.compileFile(filePath,fileContent)
-				else:
-					self.compileFile(filePath,fileContent)
+				if file == "model.html": continue
+				self.compilePath(osPath.join(path, file))
 		if self.change:
 			print()
 			self.save()
 		else:
 			print("\r\033[91mNo changes detected    \033[0m",end="")
+	def compilePath(self, filePath: str):
+		try:
+			with open(filePath, "r") as f:
+				fileContent = f.read()
+		except UnicodeDecodeError:
+			with open(filePath, "rb") as f:
+				fileContent = str(f.read())
+		if filePath in self.cache:
+			if self.cache[filePath] != fileContent:
+				self.compileFile(filePath,fileContent)
+		else:
+			self.compileFile(filePath,fileContent)
 	def compileFile(self, filePath: str, fileContent: str):
 		self.change = True
 		print(f"\nCompiling {filePath}...",end="")
@@ -58,5 +64,13 @@ class compiler:
 		makedirs(osPath.dirname(compiledFilePath), exist_ok=True)
 
 		match filePath.split(".")[-1]:
+			case "html":
+				compiled = compileHTML(fileContent,filePath,self.models)
+				if osPath.basename(filePath) == "model.html":
+					self.models[filePath.removesuffix("/model.html")] = compiled
+				else:
+					with open(compiledFilePath, "w") as f:
+						f.write(compiled)
 			case _:
 				copy(filePath, compiledFilePath)
+

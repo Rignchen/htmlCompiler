@@ -12,7 +12,7 @@ def init():
 	settings = {
 		"htmlCompilerVersion": 1,
 		"autoCompile": True,
-		"compileDelay": 600, # = 10 minutes
+		"compileDelay": 10, # seconds
 		# add settings here
 	}
 	# create the htmlCompilerCache.json file

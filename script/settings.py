@@ -28,7 +28,7 @@ Type 'reset' to reset all settings to default
 				case "": pass
 				case "reset":
 					self.get['autoCompile'] = True
-					self.get['compileDelay'] = 600
+					self.get['compileDelay'] = 10
 					# add settings here
 					print("Settings have been reset to default")
 					self.save()
