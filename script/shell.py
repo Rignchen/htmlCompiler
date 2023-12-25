@@ -21,7 +21,7 @@ class shell:
 		], " - "))
 
 	def run(self,command: str):
-		match command.strip():
+		match command.strip().lower():
 			case "":
 				pass
 			case "exit"|"esc":
@@ -34,6 +34,11 @@ class shell:
 				self.settings.menu()
 			case "compile"|"build"|"start":
 				self.compiler.start()
+			case "clearcache":
+				self.compiler.cache = {}
+				self.compiler.saveCache()
+				self.compiler.models = {}
+				self.compiler.saveModels()
 			case _:
 				print(f"Unknown command '{command}'")
 
