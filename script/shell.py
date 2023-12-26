@@ -1,9 +1,9 @@
-from os import getcwd, path, system, name
+from os import getcwd, listdir, path, remove, system, name as osName
 from script.lib import alignText, readVersion, zip_file
 from script.settings import settings
 from script.compiler import compiler
 
-def cls():system("clear" if name == "" else "cls")
+def cls():system("clear" if osName == "" else "cls")
 
 class shell:
 	def __init__(self,param):
@@ -41,7 +41,9 @@ class shell:
 				self.compiler.models = {}
 				self.compiler.saveModels()
 			case "zip":
-				zip_file(["compiled"], path.basename(getcwd()))
+				name = path.basename(getcwd()) + ".zip"
+				if name in listdir(): remove(name)
+				zip_file(["compiled"], name)
 			case _:
 				print(f"Unknown command '{command}'")
 
