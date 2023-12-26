@@ -7,6 +7,7 @@ from script.fileCompiler.htmlFile import compileHTML
 class compiler:
 	def __init__(self, settings):
 		self.settings = settings
+		self.fail = 0
 		with open("htmlCompilerModelsCache.json", "r") as f:
 			self.models: dict[str,str] = load(f)
 		with open("htmlCompilerCache.json", "r") as f:
@@ -25,6 +26,7 @@ class compiler:
 			while datetime.now() < end: pass
 		else:
 			self.test_compile()
+			print()
 	def test_compile(self):
 		print("\r\033[94mChecking for changes...\033[0m",end="")
 		# compile all the files from the subfolder "run" if they changed
@@ -51,12 +53,14 @@ class compiler:
 				if file == "model.html": continue
 				self.compilePath(osPath.join(path, file))
 		if self.change:
+			self.fail = 0
 			print()
 			if self.changeModels:
 				self.saveModels()
 			self.saveCache()
 		else:
-			print("\r\033[91mNo changes detected    \033[0m",end="")
+			print(f"\r\033[91mNo changes detected {f'({self.fail})' if self.fail > 0 else 3*' '}\033[0m",end="")
+			self.fail += 1
 	def compilePath(self, filePath: str):
 		try:
 			with open(filePath, "r") as f:
