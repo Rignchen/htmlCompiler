@@ -21,6 +21,6 @@ def formatHtml(fileContent: str):
 		if line.startswith("</"):
 			tab = max(0, tab -1)
 		out.append("\t" * tab + line)
-		if line.startswith("<") and not (line.startswith("<!") or line.startswith("<meta") or line.startswith("<link") or line.startswith("</") or line.endswith("/>")):
+		if line.startswith("<") and not (line.startswith("<!") or line.startswith("<meta") or line.startswith("<input") or line.startswith("<link") or line.startswith("</") or line.endswith("/>")):
 			tab += 1
 	return "\n".join(out)
