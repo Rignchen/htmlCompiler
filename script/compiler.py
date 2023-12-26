@@ -40,7 +40,10 @@ class compiler:
 					del self.models[model]
 					self.actualiseModels(model)
 				else: remove(f"compiled/{cacheFile.removeprefix('run/')}")
-				del self.cache[cacheFile]
+				try:
+					del self.cache[cacheFile]
+				except KeyError: # the file has allready been removed
+					pass
 		for (path, dirs, files) in walk("run"):
 			if "model.html" in files:
 				self.compilePath(osPath.join(path, "model.html"))
