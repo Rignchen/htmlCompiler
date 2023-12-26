@@ -9,18 +9,18 @@ def removeComments(fileContent: str) -> str:
 		fileContent = fileContent[:fileContent.index("<!--")] + fileContent[fileContent.index("-->")+3:]
 	return fileContent
 def formatHtml(fileContent: str):
-	fileContent = fileContent.replace("\t","")
 	fileContent = fileContent.replace(">",">\n").replace("<","\n<")
 	fileContent = fileContent.removeprefix("\n").removesuffix("\n")
-	while "\n\n" in fileContent: fileContent =  fileContent.replace("\n\n","\n")
-	content = fileContent.split("\n")
+	content = [file.strip() for file in fileContent.split("\n")]
+	while "" in content: content.remove("")
 	
 	tab = 0
 	out = []
-	for line in content:
-		if line.startswith("</"):
+	for line in range(len(content)):
+		if content[line].startswith("</"):
 			tab = max(0, tab -1)
-		out.append("\t" * tab + line)
-		if line.startswith("<") and not (line.startswith("<!") or line.startswith("<meta") or line.startswith("<input") or line.startswith("<link") or line.startswith("</") or line.endswith("/>")):
-			tab += 1
+		out.append("\t" * tab + content[line])
+		if content[line].startswith("<") and not (content[line].startswith("</") or content[line].endswith("/>")):
+			if content[line].split(" ")[0].replace("<","</",1) in "".join(content[line:]):
+				tab += 1
 	return "\n".join(out)
