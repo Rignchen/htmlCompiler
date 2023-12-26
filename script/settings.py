@@ -1,5 +1,5 @@
 from json import load, dump
-from script.lib import align, sec2hours
+from script.lib import alignText, sec2hours
 
 class settings:
 	def __init__(self, param):
@@ -12,7 +12,7 @@ class settings:
 			dump(self.get, f, indent="\t")
 	def help(self):
 		print()
-		print(align([
+		print(alignText([
 			"autocompile - toggles whether the compiler will automatically compile files when they are saved",
 			"compiledelay - sets the delay between each time the compiler will check for files to compile (in seconds)",
 			# add settings here

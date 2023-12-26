@@ -2,7 +2,7 @@ from genericpath import isdir
 from os import getcwd, listdir, path as osPath, walk
 from zipfile import ZipFile, ZIP_DEFLATED
 
-def align(text: list[str], split: str, join:str = None) -> str:
+def alignText(text: list[str], split: str, join:str = None) -> str:
 	"""
 	Aligns each element in the strings to the element above it.
 	"""

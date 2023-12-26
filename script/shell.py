@@ -1,5 +1,5 @@
 from os import getcwd, path, system, name
-from script.lib import align, readVersion, zip_file
+from script.lib import alignText, readVersion, zip_file
 from script.settings import settings
 from script.compiler import compiler
 
@@ -12,7 +12,7 @@ class shell:
 		self.compiler = compiler(self.settings)
 
 	def help(self):
-		print(align([
+		print(alignText([
 			"help - displays this message",
 			"clear - clears the screen",
 			"compile - starts the compiler",
