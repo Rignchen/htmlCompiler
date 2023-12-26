@@ -7,7 +7,7 @@ def init():
 	create all the necessary files and folders
 	"""
 	from json import dump
-	from os import mkdir, listdir
+	from os import mkdir, listdir, system
 	# create the htmlCompilerSettings.json file
 	settings = {
 		"autoCompile": True,
@@ -22,9 +22,10 @@ def init():
 	# create the run and compiled folder
 	if not "run" in listdir():mkdir("run")
 	if not "compiled" in listdir():mkdir("compiled")
-	# create the gitignore file
+	# create the gitignore file and git repo
 	with open(".gitignore", "w") as f:
 		f.write("compiled\nhtmlCompiler*.json\n")
+	system("git init")
 def start(word):
 	global param
 	match word:

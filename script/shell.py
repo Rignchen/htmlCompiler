@@ -1,5 +1,5 @@
-from os import system, name
-from script.lib import align, readVersion
+from os import getcwd, path, system, name
+from script.lib import align, readVersion, zip_file
 from script.settings import settings
 from script.compiler import compiler
 
@@ -40,6 +40,8 @@ class shell:
 				self.compiler.saveCache()
 				self.compiler.models = {}
 				self.compiler.saveModels()
+			case "zip":
+				zip_file(["compiled"], path.basename(getcwd()))
 			case _:
 				print(f"Unknown command '{command}'")
 
