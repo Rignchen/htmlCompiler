@@ -1,5 +1,5 @@
 from json import load, dump
-from script.lib import alignText, sec2hours
+from script.lib.basic import alignText, sec2hours
 
 class settings:
 	def __init__(self, param):

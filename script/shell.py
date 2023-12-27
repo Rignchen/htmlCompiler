@@ -1,5 +1,6 @@
 from os import getcwd, listdir, path, remove, system, name as osName
-from script.lib import alignText, readVersion, zip_file
+from script.lib.basic import alignText, readVersion
+from script.lib.zip import zip_file
 from script.settings import settings
 from script.compiler import compiler
 
