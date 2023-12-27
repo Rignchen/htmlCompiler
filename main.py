@@ -33,14 +33,34 @@ def start(word):
 			init()
 			print("Initialized!")
 		case "compilerDebug":
-			param["compilerDebug"] = True
+			param["compilerDebug"] = not param["compilerDebug"]
+		case "host"|"localhost":
+			param['host'] = not param['host']
 		case _:
-			chdir(word)
+			arg = word.split("-",1)
+			match arg[0]:
+				case "host"|"localhost":
+					param['host'] = True
+					param["hostPort"] = int(arg[1])
+				case _:
+					chdir(word)
 
 param = {
-	"compilerDebug": False
+	"compilerDebug": False,
+	"host": False,
+	"hostPort": 8080,
 }
 
 for i in argv[1:]: start(i)
 
-shell(param).shell()
+
+if param['host']:
+	from script.lib.localhost import startLocalhost
+	thread = startLocalhost("compiled", param["hostPort"])
+
+try: shell(param).shell()
+except KeyboardInterrupt: pass
+
+finally:
+	if param["host"]:
+		thread.terminate()
