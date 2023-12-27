@@ -1,13 +1,14 @@
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
 
-def localhost(port: int) -> None:
+def localhost(port: int = 8000, force_port: bool = False) -> None:
 	handler = SimpleHTTPRequestHandler
 	while True:
 		try: 
 			localhostLaunch(port, handler)
 			break
 		except OSError:
+			if force_port: raise
 			port += 1
 def localhostLaunch(port: int, handler) -> None:
 	with TCPServer(("", port), handler) as httpd:
