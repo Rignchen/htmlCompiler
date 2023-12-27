@@ -1,4 +1,5 @@
 from http.server import SimpleHTTPRequestHandler
+from multiprocessing import Process
 from socketserver import TCPServer
 
 class CustomHttpHandler(SimpleHTTPRequestHandler):
@@ -22,3 +23,7 @@ def localhostLaunch(port: int, handler) -> None:
 			httpd.serve_forever()
 		except:
 			print("\nServer stopped.")
+def startLocalhost(directory: str = ".", port: int = 8000, force_port: bool = False):
+	process = Process(target=localhost,args=(directory, port, force_port))
+	process.start()
+	return process
