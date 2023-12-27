@@ -1,8 +1,13 @@
 from http.server import SimpleHTTPRequestHandler
 from socketserver import TCPServer
 
-def localhost(port: int = 8000, force_port: bool = False) -> None:
-	handler = SimpleHTTPRequestHandler
+class CustomHttpHandler(SimpleHTTPRequestHandler):
+	dir: str = "."
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs, directory=self.dir)
+def localhost(directory: str = ".", port: int = 8000, force_port: bool = False) -> None:
+	handler = CustomHttpHandler
+	handler.dir = directory
 	while True:
 		try: 
 			localhostLaunch(port, handler)
