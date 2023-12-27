@@ -30,8 +30,11 @@ def start(word):
 	global param
 	match word:
 		case "init":
-			init()
-			print("Initialized!")
+			global hasInit
+			if not hasInit:
+				init()
+				hasInit = True
+				print("Initialized!")
 		case "compilerDebug":
 			param["compilerDebug"] = not param["compilerDebug"]
 		case "host"|"localhost":
@@ -51,6 +54,7 @@ param = {
 	"hostPort": 8080,
 }
 
+hasInit = False
 for i in argv[1:]: start(i)
 
 
