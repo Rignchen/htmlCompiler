@@ -1,5 +1,5 @@
 from http.server import SimpleHTTPRequestHandler
-from multiprocessing import Process
+from multiprocessing import Process, Pipe
 from socketserver import TCPServer
 
 class _CustomHttpHandler(SimpleHTTPRequestHandler):
@@ -7,14 +7,17 @@ class _CustomHttpHandler(SimpleHTTPRequestHandler):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs, directory=self.dir)
 
-def _localhostLaunch(port: int, handler) -> None:
+def _sendMessage(message, pipe: any = None):
+	if pipe == None: print(message)
+	else: pipe.send(message)
+def _localhostLaunch(port: int, handler, pipe: any) -> None:
 	with TCPServer(("", port), handler) as httpd:
-		print(f"Serving on http://localhost:{port}")
+		_sendMessage(f"Starting localhost on http://localhost:{port}", pipe)
 		try:
 			httpd.serve_forever()
 		except:
-			print("\nServer stopped.")
-def localhost(directory: str = ".", port: int = 8000, force_port: bool = False) -> None:
+			_sendMessage("\nServer stopped.", pipe)
+def localhost(directory: str = ".", port: int = 8000, force_port: bool = False, pipe: any = None) -> None:
 	"""
 	Start a new localhost\n
 	This will use the whole thread, consider using the startLocalhost function to remediate
@@ -23,21 +26,24 @@ def localhost(directory: str = ".", port: int = 8000, force_port: bool = False) 
 	handler.dir = directory
 	while True:
 		try: 
-			_localhostLaunch(port, handler)
+			_localhostLaunch(port, handler, pipe)
 			break
 		except OSError:
 			if force_port: raise
 			port += 1
 def startLocalhost(directory: str = ".", port: int = 8000, force_port: bool = False):
 	"""
-	Start a new localhost on a new Process
+	Start a new localhost on a new Process\n
+	It return the process and pipe used for the localhost, both of them are needed to stop this one
 	"""
-	process = Process(target=localhost,args=(directory, port, force_port))
+	parent_pipe, child_pipe = Pipe()
+	process = Process(target=localhost,args=(directory, port, force_port, child_pipe))
 	process.start()
-	return process
-def stopLocalhost(localhost: Process) -> None:
+	return process, parent_pipe
+def stopLocalhost(localhost: tuple[Process, any]) -> None:
 	"""
 	Stop a thread with the localhost\n
 	The input is the return of startLcalhost()
 	"""
-	localhost.terminate()
+	process, pipe = localhost
+	process.terminate()

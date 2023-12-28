@@ -1,10 +1,8 @@
-from os import getcwd, listdir, path, remove, system, name as osName
-from script.lib.basic import alignText, readVersion
+from os import getcwd, listdir, path, remove
+from script.lib.basic import alignText, cls, readVersion
 from script.lib.zip import zip_file
 from script.settings import settings
 from script.compiler import compiler
-
-def cls():system("clear" if osName == "" else "cls")
 
 class shell:
 	def __init__(self,param):
@@ -49,7 +47,6 @@ class shell:
 				print(f"Unknown command '{command}'")
 
 	def shell(self):
-		cls()
 		print("Welcome to HtmlCompiler!")
 		print("Version:", readVersion(self.settings.version))
 		print("Type 'help' for a list of commands\n")

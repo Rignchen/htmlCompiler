@@ -1,6 +1,9 @@
 from sys import argv
 from os import chdir
+from script.lib.basic import cls
 from script.shell import shell
+
+cls()
 
 def init():
 	"""
@@ -61,6 +64,7 @@ for i in argv[1:]: start(i)
 if param['host']:
 	from script.lib.localhost import startLocalhost, stopLocalhost
 	thread = startLocalhost("compiled", param["hostPort"])
+	print(thread[1].recv())
 
 try: shell(param).shell()
 except KeyboardInterrupt: pass
