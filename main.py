@@ -59,7 +59,7 @@ for i in argv[1:]: start(i)
 
 
 if param['host']:
-	from script.lib.localhost import startLocalhost
+	from script.lib.localhost import startLocalhost, stopLocalhost
 	thread = startLocalhost("compiled", param["hostPort"])
 
 try: shell(param).shell()
@@ -67,4 +67,4 @@ except KeyboardInterrupt: pass
 
 finally:
 	if param["host"]:
-		thread.terminate()
+		stopLocalhost(thread)
