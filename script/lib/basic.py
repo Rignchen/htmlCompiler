@@ -12,7 +12,8 @@ def alignText(text: list[str], split: str, join:str = None) -> str:
 	out: list[list[str]] = []
 	size = len(splitText[0])
 	for i in splitText: 
-		if len(i) != size: raise ValueError("All lines must have the same number of elements")
+		if len(i) != size: 
+			raise ValueError(f"All lines must have the same number of elements but found {size} in {text[0]} and {len(i)} in {split.join(i)}")
 		out.append([])
 	for i in range(size):
 		max = 0
