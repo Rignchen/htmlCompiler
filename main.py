@@ -27,7 +27,13 @@ def init():
 	if not "compiled" in listdir():mkdir("compiled")
 	# create the gitignore file and git repo
 	with open(".gitignore", "w") as f:
-		f.write("compiled\nhtmlCompiler*.json\n")
+		f.write("""
+compiled/
+htmlCompilerCache.json
+htmlCompilerModelsCache.json
+htmlCompilerSettings.json
+null
+""".replace("\n", "", 1))
 	system("git init")
 def start(word):
 	global param

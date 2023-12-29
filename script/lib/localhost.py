@@ -1,6 +1,7 @@
 from http.server import SimpleHTTPRequestHandler
 from multiprocessing import Process, Pipe
 from socketserver import TCPServer
+import sys
 
 class _CustomHttpHandler(SimpleHTTPRequestHandler):
 	dir: str = "."
@@ -14,9 +15,10 @@ def _localhostLaunch(port: int, handler, pipe: any) -> None:
 	with TCPServer(("", port), handler) as httpd:
 		_sendMessage(f"Starting localhost on http://localhost:{port}", pipe)
 		try:
+			sys.stderr = open("null","w+")
 			httpd.serve_forever()
 		except:
-			_sendMessage("\nServer stopped.", pipe)
+			_sendMessage("\nLocalhost stopped.", pipe)
 def localhost(directory: str = ".", port: int = 8000, force_port: bool = False, pipe: any = None) -> None:
 	"""
 	Start a new localhost\n
