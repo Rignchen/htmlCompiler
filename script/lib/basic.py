@@ -40,3 +40,13 @@ def readVersion(version: int) -> str:
 	sub = (version - main * 10000) // 100
 	fix = version - main * 10000 - sub * 100
 	return f"{main}.{sub}.{fix}"
+def removeComments(fileContent: str, commentStart: str, commentEnd: str):
+	"""
+	Remove everything that start with commentStart and end with commentEnd inside fileContent
+	"""
+	index = 0
+	while(commentStart in fileContent and commentEnd in fileContent):
+		index = fileContent.index(commentStart, index)
+		endIndex = fileContent.index(commentEnd, index) + len(commentEnd)
+		fileContent = fileContent[:index] + fileContent[endIndex:]
+	return fileContent

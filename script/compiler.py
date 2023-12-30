@@ -2,6 +2,7 @@ from json import load, dump
 from datetime import datetime, timedelta
 from os import makedirs, walk, path as osPath, remove
 from shutil import copy
+from script.fileCompiler.cssFile import compileCss
 from script.fileCompiler.htmlFile import compileHTML
 
 class compiler:
@@ -28,7 +29,7 @@ class compiler:
 			self.test_compile()
 			print()
 	def test_compile(self):
-		print("\r\033[94mChecking for changes...\033[0m",end="")
+		print("\r\033[94mChecking for changes...   \033[0m",end="")
 		# compile all the files from the subfolder "run" if they changed
 		self.change = False
 		self.changeModels = []
@@ -96,6 +97,15 @@ class compiler:
 				else:
 					with open(compiledFilePath, "w") as f:
 						f.write(compiled)
+			case "css":
+				try:
+					compiled = compileCss(fileContent)
+				except:
+					if self.settings.param["compilerDebug"]: raise
+					print(f"\r\033[91mUnable to compile {filePath}",end="")
+					return
+				with open(compiledFilePath, "w") as f:
+					f.write(compiled)
 			case _:
 				copy(filePath, compiledFilePath)
 	def actualiseModels(self, modelName: str):

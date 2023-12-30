@@ -1,13 +1,10 @@
 from script.fileCompiler.html.model import applyModel
+from script.lib.basic import removeComments
 
 def compileHTML(fileContent: str, filePath: str, models: dict[str,str]) -> str:
-	fileContent = removeComments(fileContent)
+	fileContent = removeComments(fileContent, "<!--", "-->")
 	fileContent = applyModel(fileContent, filePath, models)
 	return formatHtml(fileContent)
-def removeComments(fileContent: str) -> str:
-	while "<!--" in fileContent:
-		fileContent = fileContent[:fileContent.index("<!--")] + fileContent[fileContent.index("-->")+3:]
-	return fileContent
 def formatHtml(fileContent: str):
 	closeBalise = []
 	dontCloseBalise = []
