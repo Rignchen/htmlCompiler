@@ -17,8 +17,8 @@ def _localhostLaunch(port: int, handler, pipe: any) -> None:
 		try:
 			sys.stderr = open("null","w+")
 			httpd.serve_forever()
-		except:
-			_sendMessage("\nLocalhost stopped.", pipe)
+		finally:
+			_sendMessage("Localhost stopped.", pipe)
 def localhost(directory: str = ".", port: int = 8000, force_port: bool = False, pipe: any = None) -> None:
 	"""
 	Start a new localhost\n
@@ -49,3 +49,4 @@ def stopLocalhost(localhost: tuple[Process, any]) -> None:
 	"""
 	process, pipe = localhost
 	process.terminate()
+	#print(pipe.recv())

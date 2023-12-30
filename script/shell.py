@@ -1,5 +1,6 @@
 from os import getcwd, listdir, path, remove
 from script.lib.basic import alignText, cls, readVersion
+from script.lib.localhost import startLocalhost, stopLocalhost
 from script.lib.zip import zip_file
 from script.settings import settings
 from script.compiler import compiler
@@ -11,17 +12,21 @@ class shell:
 		self.compiler = compiler(self.settings)
 
 	def help(self):
-		print(alignText([
+		helpMessage = [
 			"help - displays this message",
 			"clear - clears the screen",
 			"compile - starts the compiler",
 			"settings - opens the settings menu",
 			"clearCache - Empty the whole cache",
+			"host - Stop the localhost, you can add \"force\" to kill it" if self.settings.param["host"] 
+			else "host - Start a localhost, you can specify the wanted port",
 			"exit - exits the program",
-		], " - "))
+		]
+		print(alignText(helpMessage, " - "))
 
 	def run(self,command: str):
-		match command.strip().lower():
+		commands = command.lower().split(" ")
+		match commands[0].strip():
 			case "":
 				pass
 			case "exit"|"esc":
@@ -43,8 +48,21 @@ class shell:
 				name = path.basename(getcwd()) + ".zip"
 				if name in listdir(): remove(name)
 				zip_file(["compiled"], name)
+			case "host":
+				if self.settings.param["host"]:
+					if "force" in commands:
+						self.settings.param["localhost"][0].kill()
+					else:
+						stopLocalhost(self.settings.param["localhost"])
+					self.settings.param["host"] = False
+				else:
+					if 1 < len(commands) <= 4 and commands[1].isdigit():
+						self.settings.param["hostPort"] = int(commands[1])
+					self.settings.param["localhost"] = startLocalhost("compiled", self.settings.param["hostPort"])
+					self.settings.param["host"] = True
+					print(self.settings.param["localhost"][1].recv())
 			case _:
-				print(f"Unknown command '{command}'")
+				print(f"Unknown command '{commands[0]}'")
 
 	def shell(self):
 		print("Welcome to HtmlCompiler!")

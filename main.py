@@ -61,6 +61,7 @@ param = {
 	"compilerDebug": False,
 	"host": False,
 	"hostPort": 8080,
+	"localhost": None
 }
 
 hasInit = False
@@ -69,12 +70,11 @@ for i in argv[1:]: start(i)
 
 if param['host']:
 	from script.lib.localhost import startLocalhost, stopLocalhost
-	thread = startLocalhost("compiled", param["hostPort"])
-	print(thread[1].recv())
+	param["localhost"] = startLocalhost("compiled", param["hostPort"])
+	print(param["localhost"][1].recv())
 
 try: shell(param).shell()
-except KeyboardInterrupt: pass
+except KeyboardInterrupt: print()
 
-finally:
-	if param["host"]:
-		stopLocalhost(thread)
+if param["host"]:
+	stopLocalhost(param["localhost"])
