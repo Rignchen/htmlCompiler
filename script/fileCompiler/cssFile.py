@@ -1,9 +1,11 @@
+from script.fileCompiler.css.insertion import insertion
 from script.lib.basic import removeComments
 
 def compileCss(fileContent: str) -> str:
 	fileContent = removeComments(fileContent,"/*","*/")
+	fileContent = insertion(fileContent)
 	return formatCss(fileContent)
-def formatCss(fileContent: str):
+def formatCss(fileContent: str) -> str:
 	content = [i.split("{") for i in fileContent.split("}")[:-1]]
 	
 	i = 0
