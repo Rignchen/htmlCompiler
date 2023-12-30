@@ -69,7 +69,7 @@ for i in argv[1:]: start(i)
 
 
 if param['host']:
-	from script.lib.localhost import startLocalhost, stopLocalhost
+	from script.lib.localhost import startLocalhost
 	param["localhost"] = startLocalhost("compiled", param["hostPort"])
 	print(param["localhost"][1].recv())
 
@@ -77,4 +77,5 @@ try: shell(param).shell()
 except KeyboardInterrupt: print()
 
 if param["host"]:
+	from script.lib.localhost import stopLocalhost
 	stopLocalhost(param["localhost"])
