@@ -1,5 +1,14 @@
+# cache file
 __pycache__
-test*
-my_script/
+
+# tests
+test.py
+test/
+test_files/
+
+# IDE
 .vscode
-*.zip
+htmlCompiler.code-workspace
+
+# compressed version of the htmlCompiler
+htmlCompiler-V*.zip
