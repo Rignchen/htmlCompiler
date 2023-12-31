@@ -49,4 +49,4 @@ def stopLocalhost(localhost: tuple[Process, any]) -> None:
 	"""
 	process, pipe = localhost
 	process.terminate()
-	#print(pipe.recv())
+	print("Localhost stopped.")

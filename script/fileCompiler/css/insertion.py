@@ -1,5 +1,9 @@
 def insertion(fileContent: str) -> str:
-	return fileContent
+	parsed = parse(fileContent)
+	out = ""
+	for selectors, content in parsed:
+		out += glue_selectors(selectors) + "{" + content + "}"
+	return out
 def parse(fileContent: str) -> list[tuple[list[str], str]]:
 	"""
 	parse the given content\n\n
@@ -34,3 +38,14 @@ def parse(fileContent: str) -> list[tuple[list[str], str]]:
 	
 	out.reverse()
 	return out
+def glue_selectors(selectors: list[str]) -> str:
+	out = selectors.pop(0).split(",")
+	for i in selectors:
+		new = []
+		for j in out:
+			for k in i.split(","):
+				addition = k.strip()
+				if not addition.startswith(":"): addition = " " + addition
+				new.append(j.strip() + addition)
+		out = new
+	return ",".join(out)
