@@ -56,7 +56,7 @@ class shell:
 						stopLocalhost(self.settings.param["localhost"])
 					self.settings.param["host"] = False
 				else:
-					if 1 < len(commands) <= 4 and commands[1].isdigit():
+					if 1 < len(commands) and commands[1].isdigit() and len(command[1]) <= 4:
 						self.settings.param["hostPort"] = int(commands[1])
 					self.settings.param["localhost"] = startLocalhost("compiled", self.settings.param["hostPort"])
 					self.settings.param["host"] = True
