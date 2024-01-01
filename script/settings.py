@@ -3,7 +3,7 @@ from script.lib.basic import alignText, sec2hours
 
 class settings:
 	def __init__(self, param):
-		self.version = 302
+		self.version = 400
 		self.param = param
 		with open("htmlCompilerSettings.json", "r") as f:
 			self.get: dict[str,any] = load(f)

@@ -1,6 +1,7 @@
 from script.lib.basic import correctPath
 
 def applyModel(fileContent: str, filePath: str, models: dict[str,str]) -> str:
+	fileContent = fileContent.replace("<pass/>","<model><model/></model>")
 	if "<model>" in fileContent: 
 		return pasteModel(getModel(models,filePath),splitModels(fileContent))
 	return fileContent
