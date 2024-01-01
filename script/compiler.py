@@ -4,6 +4,7 @@ from os import makedirs, walk, path as osPath, remove
 from shutil import copy
 from script.fileCompiler.cssFile import compileCss
 from script.fileCompiler.htmlFile import compileHTML
+from script.lib.basic import correctPath
 
 class compiler:
 	def __init__(self, settings):
@@ -38,11 +39,11 @@ class compiler:
 			if not osPath.exists(cacheFile):
 				self.change = True
 				print(f"\nDeleting {cacheFile}...",end="")
-				if cacheFile.endswith("/model.html"):
-					model = cacheFile.removesuffix("/model.html")
+				if cacheFile.endswith(correctPath("/model.html")):
+					model = cacheFile.removesuffix(correctPath("/model.html"))
 					del self.models[model]
 					self.actualiseModels(model)
-				else: remove(f"compiled/{cacheFile.removeprefix('run/')}")
+				else: remove(f"compiled/{cacheFile.removeprefix(correctPath('run/'))}")
 				try:
 					del self.cache[cacheFile]
 				except KeyError: # the file has allready been removed
@@ -79,7 +80,7 @@ class compiler:
 		print(f"\nCompiling {filePath}...",end="")
 		self.cache[filePath] = fileContent
 
-		compiledFilePath = f"compiled/{filePath.removeprefix('run/')}"
+		compiledFilePath = f"compiled/{filePath.removeprefix(correctPath('run/'))}"
 		makedirs(osPath.dirname(compiledFilePath), exist_ok=True)
 
 		match filePath.split(".")[-1]:
@@ -91,7 +92,7 @@ class compiler:
 					print(f"\r\033[91mUnable to compile {filePath}",end="")
 					return
 				if osPath.basename(filePath) == "model.html":
-					model = filePath.removesuffix("/model.html")
+					model = filePath.removesuffix(correctPath("/model.html"))
 					self.actualiseModels(model)
 					self.models[model] = compiled
 				else:
@@ -112,6 +113,6 @@ class compiler:
 		if self.changeModels:return
 		cachCopy = self.cache.copy()
 		for file in cachCopy:
-			if file.startswith(modelName) and file != modelName + "/model.html": del self.cache[file]
+			if file.startswith(modelName) and file != modelName + correctPath("/model.html"): del self.cache[file]
 		self.changeModels = True
 

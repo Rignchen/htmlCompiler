@@ -50,3 +50,5 @@ def removeComments(fileContent: str, commentStart: str, commentEnd: str):
 		endIndex = fileContent.index(commentEnd, index) + len(commentEnd)
 		fileContent = fileContent[:index] + fileContent[endIndex:]
 	return fileContent
+def correctPath(path: str) -> str:
+	return path.replace("/","\\") if osName == 'nt' else path.replace("\\","/")
