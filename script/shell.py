@@ -50,17 +50,13 @@ class shell:
 				zip_file(["compiled"], name)
 			case "host":
 				if self.settings.param["host"]:
-					if "force" in commands:
-						self.settings.param["localhost"][0].kill()
-					else:
-						stopLocalhost(self.settings.param["localhost"])
+					stopLocalhost(self.settings.param["localhost"])
 					self.settings.param["host"] = False
 				else:
 					if 1 < len(commands) and commands[1].isdigit() and len(command[1]) <= 4:
 						self.settings.param["hostPort"] = int(commands[1])
 					self.settings.param["localhost"] = startLocalhost("compiled", self.settings.param["hostPort"])
 					self.settings.param["host"] = True
-					print(self.settings.param["localhost"][1].recv())
 			case _:
 				print(f"Unknown command '{commands[0]}'")
 
