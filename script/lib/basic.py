@@ -2,7 +2,7 @@ from os import system, name as osName
 
 def cls():
 	"""Clear the shell"""
-	system("clear" if osName == 'nt' else "cls")
+	system("cls" if osName == 'nt' else "clear")
 def alignText(text: list[str], split: str, join:str = None) -> str:
 	"""
 	Aligns each element in the strings to the element above it.
