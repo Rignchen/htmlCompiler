@@ -1,6 +1,6 @@
 from os import path
 from script.fileCompiler.html.model import applyModel
-from script.fileCompiler.html.template import parseTemplates, applyTemplate
+from script.fileCompiler.html.template import parseTemplates, applyTemplates
 from script.lib.basic import removeComments
 
 def compileHTML(fileContent: str, filePath: str, models: dict[str,str]) -> str:
@@ -10,7 +10,7 @@ def compileHTML(fileContent: str, filePath: str, models: dict[str,str]) -> str:
 	fileContent = applyModel(fileContent, filePath, models)
 	
 	if path.basename(filePath) != "model.html":
-		fileContent = applyTemplate(fileContent, templates)
+		fileContent = applyTemplates(fileContent, templates)
 	return formatHtml(fileContent)
 def formatHtml(fileContent: str):
 	closeBalise = []

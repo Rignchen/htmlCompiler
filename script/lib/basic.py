@@ -51,4 +51,39 @@ def removeComments(fileContent: str, commentStart: str, commentEnd: str):
 		fileContent = fileContent[:index] + fileContent[endIndex:]
 	return fileContent
 def correctPath(path: str) -> str:
+	"""
+	Replace the / by \\ on windows, do the opposite on linux
+	"""
 	return path.replace("/","\\") if osName == 'nt' else path.replace("\\","/")
+def parseStr(content: str, maxSplit: int = -1) -> list[str]:
+	"""
+	Split the content around string separator
+	"""
+	temp = escapeSplit(content,'"',maxSplit*2)
+	if len(temp)%2 == 0: raise SyntaxError("String not closed")
+	return temp
+def escapeSplit(content: str, character: str, maxSplit: int = -1):
+	"""
+	Split the content around character only if this character isn't escaped
+	"""
+	esc = False
+	escLast = False
+	out = [""]
+	for i in range(len(content)):
+		if content[i] == "\\":
+			esc = True
+		if content[i] == character and not escLast:
+			maxSplit -= 1
+			if maxSplit == 0:
+				out.append(content[i+1:])
+				break
+			else: out.append("")
+		else:
+			out[-1] += content[i]
+		
+		if esc:
+			if escLast: escLast = False
+			else: escLast = True
+		else: escLast = False
+		esc = False
+	return out

@@ -39,7 +39,7 @@ class shell:
 				self.settings.menu()
 			case "compile"|"build"|"start":
 				self.compiler.start()
-			case "clearcache":
+			case "clearcache"|"cc":
 				self.compiler.cache = {}
 				self.compiler.saveCache()
 				self.compiler.models = {}
