@@ -24,6 +24,21 @@ if not "run" in listdir():
 if not "compiled" in listdir():
 	mkdir("compiled")
 
+# add the html exemple files
+with open("run/model.html", "w") as f:
+	f.write(formatHtml("".join([
+		'<!DOCTYPE html><html lang="en">',
+		'<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><model/><!-- this first model is here to add stuff in the head balise --><title>Document</title></head>',
+		'<body><model/><!-- this second model is the main content of the page --></body></html>'
+	])))
+with open("run/index.html", "w") as f:
+	f.write(formatHtml("".join([
+		'<model><link rel="stylesheet" href="style.css"></model>',
+		'<model><h1>Hello World</h1></model>'
+	])))
+with open("run/style.css", "w") as f:
+	f.write(formatCss('h1{text-align:center;font-size:10em;}'))
+
 # create the gitignore file and git repo
 with open(".gitignore", "w") as f:
 	f.write("\n".join([
