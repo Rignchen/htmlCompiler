@@ -1,7 +1,8 @@
 from http.server import SimpleHTTPRequestHandler
-from threading import Thread
+from os import name as osName
 from socketserver import TCPServer
 import sys
+from threading import Thread
 
 class _CustomHttpHandler(SimpleHTTPRequestHandler):
 	dir: str = "."
@@ -35,7 +36,7 @@ class localhostThread(Thread):
 		self.httpd = TCPServer(("", self.port), handler)
 		sendMessage(f"Starting localhost on http://localhost:{self.port}", self.pipe)
 		try:
-			sys.stderr = open("null","w+")
+			sys.stderr = open("null" if osName == "nt" else "/dev/null", "w")
 			self.httpd.serve_forever()
 		finally:
 			sendMessage("Localhost stopped", self.pipe)
