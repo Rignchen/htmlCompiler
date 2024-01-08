@@ -6,7 +6,18 @@ def compileCss(fileContent: str) -> str:
 	fileContent = insertion(fileContent)
 	return formatCss(fileContent)
 def formatCss(fileContent: str) -> str:
-	content = [i.split("{") for i in fileContent.split("}")[:-1]]
+	last_colomn = 0
+	for i in range(len(fileContent)):
+		match fileContent[i]:
+			case ";": last_colomn = i
+			case "{": break
+	if last_colomn:
+		last_colomn += 1
+		out = fileContent[:last_colomn]
+		out += "\n"
+	else: out = ""
+
+	content = [i.split("{") for i in fileContent[last_colomn:].split("}")[:-1]]
 	
 	i = 0
 	while i < len(content):
@@ -19,4 +30,4 @@ def formatCss(fileContent: str) -> str:
 			continue
 		i += 1
 	
-	return "\n".join([i[0] + " {" + i[1] + "}" for i in content])
+	return out + "\n".join([i[0] + " {" + i[1] + "}" for i in content])
